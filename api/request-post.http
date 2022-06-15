@@ -1,0 +1,50 @@
+### Create Post
+POST http://localhost:8800/api/post
+Content-Type: application/json
+
+{
+    	"title": "third Post",
+		"desc": "Third post description",
+		"photo": "firstphoto.png",
+		"username": "john",
+		"categories": ["Gym"]
+}
+
+
+### Update Post
+PATCH http://localhost:8800/api/post/62a9e0c1d6c0cb282d111818
+Content-Type: application/json
+
+{
+    	"title": "UpdatedTest Post",
+		"username": "merry"		
+}
+
+
+### Delete Post
+DELETE http://localhost:8800/api/post/
+Content-Type: application/json
+
+{
+    "username": ""
+}
+
+
+### find Post
+GET http://localhost:8800/api/post/62a9e085d6c0cb282d111814
+
+
+### Find posts by username
+GET http://localhost:8800/api/post/list/by-query?username=john
+
+
+### Find posts by categoryName
+GET http://localhost:8800/api/post/list/by-query?categoryName=Gym
+
+
+### Find posts by username and categoryName
+GET http://localhost:8800/api/post/list/by-query?username=john&categoryName=Gym
+
+
+### Find all posts
+GET http://localhost:8800/api/post/list/by-query

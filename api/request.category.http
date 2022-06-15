@@ -1,0 +1,10 @@
+### Create Category
+POST http://localhost:8800/api/category
+Content-Type: application/json
+
+{
+    "name": "Life Style"
+}
+
+### Get category by id
+GET http://localhost:8800/api/category/62a9c69a915e87d4f33077e2
