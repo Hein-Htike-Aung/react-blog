@@ -5,7 +5,7 @@ export interface PostDocument extends mongoose.Document {
 	desc: string;
 	photo: string;
 	username: string;
-	categories: string[];
+	categories: { name: string }[];
 }
 
 const PostScheme = new mongoose.Schema(
@@ -27,7 +27,8 @@ const PostScheme = new mongoose.Schema(
 			type: String,
 			required: true,
 		},
-		categories: { // Category Name
+		categories: {
+			// Category Name
 			type: Array,
 		},
 	},

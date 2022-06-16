@@ -3,11 +3,18 @@ POST http://localhost:8800/api/post
 Content-Type: application/json
 
 {
-    	"title": "third Post",
-		"desc": "Third post description",
+    	"title": "fifth Post",
+		"desc": "first post description",
 		"photo": "firstphoto.png",
-		"username": "john",
-		"categories": ["Gym"]
+		"username": "merry",
+		"categories": [			
+			{
+				"name": "Music"
+			},
+			{
+				"name": "Life style"
+			}			
+		]
 }
 
 
@@ -22,11 +29,11 @@ Content-Type: application/json
 
 
 ### Delete Post
-DELETE http://localhost:8800/api/post/
+DELETE http://localhost:8800/api/post/62aaf4881af8ed4cd36d95d0
 Content-Type: application/json
 
 {
-    "username": ""
+    "username": "john"
 }
 
 
@@ -39,8 +46,7 @@ GET http://localhost:8800/api/post/list/by-query?username=john
 
 
 ### Find posts by categoryName
-GET http://localhost:8800/api/post/list/by-query?categoryName=Gym
-
+GET http://localhost:8800/api/post/list/by-query?categoryName=Life%20style
 
 ### Find posts by username and categoryName
 GET http://localhost:8800/api/post/list/by-query?username=john&categoryName=Gym
@@ -48,3 +54,6 @@ GET http://localhost:8800/api/post/list/by-query?username=john&categoryName=Gym
 
 ### Find all posts
 GET http://localhost:8800/api/post/list/by-query
+
+### Get image
+GET http://localhost:8800/api/images/1655370888741blackhole.jpg

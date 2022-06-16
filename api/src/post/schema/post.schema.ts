@@ -6,7 +6,12 @@ export const payload = {
 		desc: string().required('Name is required'),
 		photo: string().required('Name is required'),
 		username: string().required('Name is required'),
-		categories: array().min(1),
+		categories: array().of(
+			object().shape({
+				name: string().max(255).required().label('name'),
+			}),
+		),
+		// .min(1),
 	}),
 };
 
@@ -25,13 +30,17 @@ export const updatePostSchema = object({
 		title: string(),
 		desc: string(),
 		photo: string(),
-		categories: array(),
+		categories: array().of(
+			object().shape({
+				name: string().max(255).required().label('name'),
+			}),
+		),
 	}),
 });
 
 export const deletePostSchema = object({
 	...params,
 	body: object({
-		username: string().required('Name is required'),
+		username: string().required('Current User name is required'),
 	}),
 });

@@ -12,3 +12,7 @@ export const createCategory = async (input: DocumentDefinition<CategoryDocument>
 export const findCategoryById = (id: string) => {
     return Category.findById(id)
 }
+
+export const getAllCategories = () => {
+	return Category.find();
+}

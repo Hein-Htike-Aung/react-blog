@@ -1,31 +1,31 @@
-import React from 'react';
-import './post.css';
 import { Link } from 'react-router-dom';
+import { API_IMAGE_URL } from '../../api/apiurl';
+import './post.css';
 
-const Post = ({ img }) => {
+const Post = ({ post }) => {
+	const PF = API_IMAGE_URL;
+
 	return (
-		<Link className='link' to={'post/2'}>
+		<Link className='link' to={`/post/${post._id}`}>
 			<div className='post'>
-				<img className='postImg' src={img} alt='' />
+				{post.photo && <img className='postImg' src={PF + "/" + post.photo} alt='' />}
+
 				<div className='postInfo'>
 					<div className='postCats'>
-						<span className='postCat'>Music</span>
-						<span className='postCat'>Life</span>
+						{post.categories.map((c, index) => (
+							<span key={index} className='postCat'>
+								{c.name}
+							</span>
+						))}
 					</div>
-					<span className='postTitle'>Lorem ipsum, dolor sit amet</span>
+
+					<span className='postTitle'>{post.title}</span>
 					<hr />
-					<span className='postDate'>1 hour ago</span>
+					<span className='postDate'>
+						{new Date(post.createdAt).toDateString()}
+					</span>
 				</div>
-				<p className='postDesc'>
-					Lorem ipsum, dolor sit amet consectetur adipisicing elit. Aperiam
-					perspiciatis ration Lorem, ipsum dolor sit amet consectetur
-					adipisicing elit. Aliquid eaque corporis magni autem facere quisquam
-					illum beatae. Deserunt assumenda quos veniam at, pariatur dolores
-					suscipit necessitatibus perferendis qui iste magni. Lorem ipsum dolor
-					sit amet consectetur, adipisicing elit. Odit ab odio culpa obcaecati
-					aliquid saepe aperiam error provident voluptatem, debitis assumenda
-					nisi recusandae ullam enim, cumque in atque vero velit.
-				</p>
+				<p className='postDesc'>{post.desc}</p>
 			</div>
 		</Link>
 	);

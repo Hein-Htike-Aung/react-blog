@@ -1,7 +1,7 @@
 import { createCategorySchema } from './schema/category.schema';
 import { Express } from 'express';
 import validateRequest from '../middleware/validateRequest';
-import { createCategoryHandler, getCategoryHandler } from './controllers/category.controller';
+import { createCategoryHandler, getAllCategoriesHandler, getCategoryHandler } from './controllers/category.controller';
 
 export const CATEGORY_URL = '/api/category';
 
@@ -11,4 +11,7 @@ export const categoryRoute = (app: Express) => {
 
     /* Get Category By id */
     app.get(`${CATEGORY_URL}/:categoryId`, getCategoryHandler)
+
+    /* Get all Categories */
+    app.get(`${CATEGORY_URL}`, getAllCategoriesHandler);
 }

@@ -1,4 +1,9 @@
-import { deleteUser, findUserById, findUserByUsername, updateUser } from './../services/user.service';
+import {
+	deleteUser,
+	findUserById,
+	findUserByUsername,
+	updateUser,
+} from './../services/user.service';
 import { Request, Response } from 'express';
 import log from '../../log';
 import { registerUser, validateuser } from '../services/user.service';
@@ -12,8 +17,8 @@ export const registerUserHandler = async (req: Request, res: Response) => {
 
 		return res.status(200).json(omit(user.toJSON(), 'password'));
 	} catch (e: any) {
-			log.error(e);
-			return res.status(409).send({ error: e.message });
+		log.error(e);
+		return res.status(409).send({ error: e.message });
 	}
 };
 
@@ -44,11 +49,11 @@ export const updateUserHandler = async (req: Request, res: Response) => {
 			update.password = hash;
 		}
 
-		await updateUser(userIdFromParam, update, { new: true });
+		const updatedUser = await updateUser(userIdFromParam, update, {
+			new: true,
+		});
 
-		return res
-			.status(200)
-			.send({ message: 'Account has been updated successfully' });
+		return res.send(updatedUser);
 	} else {
 		return res.status(403).send({ error: 'You can only update your data' });
 	}
@@ -71,15 +76,17 @@ export const deleteUserHandler = async (req: Request, res: Response) => {
 	} else {
 		return res.status(403).send({ error: 'You can only delete your data' });
 	}
-}
+};
 
 export const getUserHandler = async (req: Request, res: Response) => {
 	const userId = get(req, 'query.userId');
 	const username = get(req, 'query.username');
 
-	const user = userId ? await findUserById(userId) : await findUserByUsername(username);
+	const user = userId
+		? await findUserById(userId)
+		: await findUserByUsername(username);
 
 	if (!user) return res.status(404).send({ error: 'User not found' });
 
-	return res.send(omit(user, 'password', 'updatedAt'))
-}
+	return res.send(omit(user, 'password', 'updatedAt'));
+};

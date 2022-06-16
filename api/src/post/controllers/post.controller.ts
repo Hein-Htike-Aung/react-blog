@@ -79,7 +79,7 @@ export const getPostsHandler = async (req: Request, res: Response) => {
 		query.username = username;
 	}
 	if (categoryName) {
-		query.categories = { $in: [categoryName] };
+		query.categories = { $in: [{ name: categoryName }] };
 	}
 
 	return res.json(await findPosts(query));

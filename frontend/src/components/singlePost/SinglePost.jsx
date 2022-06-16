@@ -1,40 +1,120 @@
-import React from 'react';
+import axios from 'axios';
+import { useContext, useEffect, useState } from 'react';
+import { Link, useNavigate, useParams } from 'react-router-dom';
+import { API_IMAGE_URL, API_URL } from '../../api/apiurl';
 import './singlePost.css';
+import { Context } from '../../context/Context';
 
 const SinglePost = () => {
+	const { postId } = useParams();
+	const [post, setPost] = useState({});
+	const PF = API_IMAGE_URL;
+	const [title, setTitle] = useState('');
+	const [desc, setDesc] = useState('');
+	const [updateMode, setUpdateMode] = useState(false);
+
+	const { user: currentUser } = useContext(Context);
+	const navigate = useNavigate();
+
+	useEffect(() => {
+		const fetchSinglePost = async () => {
+			const data = await getSinglePost();
+			setPost(data);
+			setTitle(data.title);
+			setDesc(data.desc);
+		};
+
+		fetchSinglePost();
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [postId]);
+
+	const getSinglePost = async () => {
+		const res = await axios.get(`${API_URL}/post/${postId}`);
+		return res.data;
+	};
+
+	const handlePostDelete = async () => {
+		try {
+			await axios.delete(`${API_URL}/post/${postId}`, {
+				data: {
+					username: currentUser.username,
+				},
+			});
+			navigate('/', { replace: true });
+		} catch (error) {
+			console.log(error);
+		}
+	};
+
+	const handleUpdate = async () => {
+		try {
+			const res = await axios.patch(`${API_URL}/post/${post._id}`, {
+				title,
+				desc,
+				username: currentUser.username,
+			});
+			res.data && setUpdateMode(false);
+		} catch (error) {
+			console.log(error);
+		}
+	};
+
 	return (
 		<div className='singlePost'>
 			<div className='singlePostWrapper'>
-				<img
-					className='singlePostImg'
-					src='https://images.pexels.com/photos/6685428/pexels-photo-6685428.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500'
-					alt=''
-				/>
-				<h1 className='singlePostTitle'>
-					Lorem ipsum d sunt optio.
-					<div className='singlePostEdit'>
-						<i className='singlePostIcon fa-solid fa-pen-to-square'></i>
-						<i className='singlePostIcon fa-solid fa-trash-can'></i>
-					</div>
-				</h1>
+				{post.photo && (
+					<img className='singlePostImg' src={PF + '/' + post.photo} alt='' />
+				)}
+				{updateMode ? (
+					<input
+						className='singlePostTitleInput'
+						type='text'
+						value={title}
+						autoFocus
+						onChange={(e) => setTitle(e.target.value)}
+					/>
+				) : (
+					<h1 className='singlePostTitle'>
+						{title}
+						{post.username === currentUser?.username && (
+							<div className='singlePostEdit'>
+								<i
+									onClick={() => setUpdateMode(true)}
+									className='singlePostIcon fa-solid fa-pen-to-square'
+								></i>
+								<i
+									onClick={handlePostDelete}
+									className='singlePostIcon fa-solid fa-trash-can'
+								></i>
+							</div>
+						)}
+					</h1>
+				)}
 				<div className='singlePostInfo'>
 					<span className='singlePostAuthor'>
-						Author: <b>Karian</b>
+						Author:
+						<Link className='link' to={`/?username=${post.username}`}>
+							<b>{post.username}</b>
+						</Link>
 					</span>
-					<span className='singlePostDate'>1 hour ago</span>
+					<span className='singlePostDate'>
+						{new Date(post.createdAt).toDateString()}
+					</span>
 				</div>
-				<p className='singlePostDesc'>
-					Lorem ipsum dolor sit amet consectetur adipisicing elit. Modi, quas
-					nobis? Veniam odio, sequi sint consequatur assumenda at distinctio
-					recusandae laboriosam dolor dolorem reiciendis, perspiciatis eos fuga
-					aspernatur minus tempore. Eveniet officia dolorem quos nemo ut, harum
-					tempora explicabo ea veniam, ad sequi ab quo consequuntur? Quos
-					provident vero quas a facilis deleniti perspiciatis est atque quis.
-					Aspernatur, enim dicta! Vero, doloremque cum voluptatum sapiente
-					praesentium ducimus nisi atque recusandae, nihil delectus, magni eius
-					vel soluta incidunt consequatur nostrum qui! Porro neque molestias
-					enim dolorum maiores doloremque sed nobis quos?
-				</p>
+				{updateMode ? (
+					<textarea
+						className='singlePostDescInput'
+						value={desc}
+						onChange={(e) => setDesc(e.target.value)}
+					/>
+				) : (
+					<p className='singlePostDesc'>{desc}</p>
+				)}
+				{updateMode && (
+					<button onClick={handleUpdate} className='singlePostButton'>
+						Update
+					</button>
+				)}
 			</div>
 		</div>
 	);

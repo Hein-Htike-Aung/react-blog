@@ -1,9 +1,20 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import './topbar.css';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { Context } from '../../context/Context';
+import { API_IMAGE_URL } from '../../api/apiurl';
 
 const TopBar = () => {
-	const user = false;
+	const { user, dispatch } = useContext(Context);
+
+	const navigate = useNavigate();
+
+	const PF = API_IMAGE_URL;
+
+	const handleLogout = () => {
+		dispatch({ type: 'LOGOUT' });
+		navigate('/login', { replace: true });
+	};
 
 	return (
 		<div className='top'>
@@ -35,20 +46,18 @@ const TopBar = () => {
 							WRITE
 						</Link>
 					</li>
-					<li className='topListItem'>
-						<Link className='link' to={'/'}>
-							{user && 'LOGOUT'}
-						</Link>
+					<li onClick={handleLogout} className='topListItem'>
+						{user && 'LOGOUT'}
 					</li>
 				</ul>
 			</div>
 			<div className='topRight'>
 				{user ? (
-					<img
-						className='topImg'
-						src='https://images.pexels.com/photos/1858175/pexels-photo-1858175.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500'
-						alt=''
-					/>
+					<Link to={'/setting'}>
+						{user.profilePic && (
+							<img className='topImg' src={PF + '/' + user.profilePic} alt='' />
+						)}
+					</Link>
 				) : (
 					<ul className='topList'>
 						<li className='topListItem'>

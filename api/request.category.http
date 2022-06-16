@@ -8,3 +8,6 @@ Content-Type: application/json
 
 ### Get category by id
 GET http://localhost:8800/api/category/62a9c69a915e87d4f33077e2
+
+### Get all categories
+GET http://localhost:8800/api/category

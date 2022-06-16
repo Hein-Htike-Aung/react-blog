@@ -1,7 +1,26 @@
-import React from 'react';
+import axios from 'axios';
+import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
+import { API_URL } from '../../api/apiurl';
 import './sidebar.css';
 
 const Sidebar = () => {
+	const [cats, setCats] = useState([]);
+
+	useEffect(() => {
+		const fetchAllCategories = async () => {
+			setCats(await getAllCategories());
+		};
+
+		fetchAllCategories();
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []);
+
+	const getAllCategories = async () => {
+		const res = await axios.get(`${API_URL}/category`);
+		return res.data;
+	};
+
 	return (
 		<div className='sidebar'>
 			<div className='sidebarItem'>
@@ -20,12 +39,15 @@ const Sidebar = () => {
 					<span>
 						<div className='sidebarTitle'>CATEGORIES</div>
 						<ul className='sidebarList'>
-							<li className='sidebarListItem'>Life</li>
-							<li className='sidebarListItem'>Music</li>
-							<li className='sidebarListItem'>Style</li>
-							<li className='sidebarListItem'>Sport</li>
-							<li className='sidebarListItem'>Tech</li>
-							<li className='sidebarListItem'>Cinema</li>
+							{cats?.map((cat) => (
+								<Link
+									className='link'
+									key={cat._id}
+									to={`/?categoryName=${cat.name}`}
+								>
+									<li className='sidebarListItem'>{cat.name}</li>
+								</Link>
+							))}
 						</ul>
 					</span>
 				</div>

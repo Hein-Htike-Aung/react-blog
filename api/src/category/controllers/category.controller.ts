@@ -1,7 +1,11 @@
 import log from '../../log';
 import { Request, Response } from 'express';
 import { get, omit } from 'lodash';
-import { createCategory, findCategoryById } from '../services/category.service';
+import {
+	createCategory,
+	findCategoryById,
+	getAllCategories,
+} from '../services/category.service';
 
 export const createCategoryHandler = async (req: Request, res: Response) => {
 	try {
@@ -20,5 +24,9 @@ export const getCategoryHandler = async (req: Request, res: Response) => {
 
 	if (!category) return res.status(404).send({ error: 'Category not found' });
 
-    return res.send(category);
+	return res.send(category);
+};
+
+export const getAllCategoriesHandler = async (req: Request, res: Response) => {
+	return res.send(await getAllCategories());
 };

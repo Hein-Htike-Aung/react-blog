@@ -6,6 +6,7 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import log from './log';
 import connect from './db/conntect';
+import { fileUploadRoute } from './core/file-upload.routes';
 const cors = require('cors');
 
 const port = config.get('port') as number;
@@ -23,6 +24,7 @@ app.use(
 app.use(bodyParser.json());
 app.use(cors());
 
+
 app.listen(port, host, () => {
 	log.info(`server listening at http://${host}:${port}`);
 
@@ -32,4 +34,5 @@ app.listen(port, host, () => {
 	userRoute(app);
 	postRoute(app);
 	categoryRoute(app);
+	fileUploadRoute(app);
 });
